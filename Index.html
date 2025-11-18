@@ -1,0 +1,258 @@
+
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Adivina el estereotipo — Tecnológico de Estudios Superiores de Jocotitlán</title>
+<style>
+  :root{
+    --bg:#0b1220; --card:#ffffff; --accent:#7c3aed; --accent2:#06b6d4; --good:#10b981; --bad:#ef4444;
+  }
+  html,body{height:100%; margin:0; font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: linear-gradient(180deg,#071032 0%, #071228 60%); color:#06102a;}
+  .wrap{max-width:1000px; margin:26px auto; padding:18px;}
+  .card{background:linear-gradient(180deg,#fff,#fbfdff); border-radius:14px; padding:18px; box-shadow:0 12px 30px rgba(2,6,23,0.45);}
+  header{display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px;}
+  .brand{display:flex; gap:12px; align-items:center;}
+  .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:30px;color:white;}
+  h1{margin:0;font-size:20px;color:#071032;}
+  .school{font-weight:700;color:var(--accent2);font-size:13px;padding:6px 10px;border-radius:999px;background:linear-gradient(90deg, rgba(124,58,237,0.06), rgba(6,182,212,0.03));}
+  .grid{display:grid;grid-template-columns:1fr 360px;gap:16px;align-items:start;}
+  .panel{padding:12px;border-radius:12px;background:linear-gradient(180deg,#fff,#f7fbff);box-shadow:0 6px 18px rgba(11,38,73,0.06);}
+  .cover{display:flex;flex-direction:column;gap:12px;align-items:flex-start;padding:18px;border-radius:12px;min-height:220px;}
+  .bigphrase{font-size:20px;font-weight:800;color:#071032;}
+  .playbtn{padding:12px 18px;border-radius:12px;border:0;background:linear-gradient(90deg,var(--accent),var(--accent2));color:white;font-weight:800;cursor:pointer;}
+  .small{font-size:13px;color:#334155;}
+  .question{display:flex;gap:12px;align-items:center;padding:12px;border-radius:12px;border:1px solid rgba(6,16,36,0.04);background:linear-gradient(180deg,#fff,#fcfeff);margin-bottom:12px;}
+  .svgwrap{width:84px;height:84px;flex:0 0 84px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg, rgba(124,58,237,0.04), rgba(6,182,212,0.02));}
+  .qtext{flex:1;}
+  .qtitle{font-weight:700;font-size:16px;margin-bottom:6px;color:#071032;}
+  .options{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap;}
+  button.opt{flex:1 1 30%;padding:10px;border-radius:10px;border:2px solid rgba(6,16,36,0.06);background:white;font-weight:800;cursor:pointer;transition:transform .12s ease, box-shadow .12s ease;}
+  button.opt:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(11,38,73,0.06);}
+  button.opt.selected{outline:3px solid rgba(124,58,237,0.14);box-shadow:0 8px 24px rgba(124,58,237,0.08);transform:translateY(-2px);}
+  .controls{display:flex;gap:8px;align-items:center;margin-top:8px;}
+  .btn{padding:10px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:700;}
+  .btn.primary{background:linear-gradient(90deg,#06b6d4,#3b82f6);color:white;}
+  .btn.ghost{background:transparent;border:2px solid rgba(6,16,36,0.06);}
+  .progress{font-weight:700;color:#334155;}
+  .footer{margin-top:12px;text-align:center;color:#56607a;font-size:13px;}
+  .resultCard{padding:12px;border-radius:12px;background:linear-gradient(90deg,#f8fffb,#fff7fb);border:1px solid rgba(6,16,36,0.04);margin-top:12px;}
+  @media (max-width:920px){ .grid{grid-template-columns:1fr;} .logo{width:54px;height:54px} .svgwrap{width:64px;height:64px} button.opt{flex:1 1 100%;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card" id="mainCard" role="application" aria-label="Juego Adivina el estereotipo">
+    <header>
+      <div class="brand">
+        <div class="logo">⚧</div>
+        <div>
+          <h1>Adivina el estereotipo</h1>
+          <div class="small">Juego interactivo para trabajar discriminación de género</div>
+        </div>
+      </div>
+      <div style="text-align:right">
+        <div class="school">Tecnológico de Estudios Superiores de Jocotitlán</div>
+        <div class="small" style="margin-top:6px">Edición educativa</div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <div class="panel cover" id="coverPanel">
+        <div class="bigphrase">¡Bienvenidos! 🙋🏻‍♂</div>
+        <div class="small">Lee cada frase, selecciona una respuesta. Al final pulsa <strong>Ver resultado</strong> para calcular la puntuación. Puedes cambiar tus respuestas antes de finalizar.</div>
+        <div style="margin-top:12px;display:flex;gap:10px;align-items:center;">
+          <label class="small">Preguntas:</label>
+          <select id="numQ" style="padding:8px;border-radius:8px;">
+            <option value="5">5</option><option value="8" selected>8</option><option value="10">10</option><option value="all">Todas</option>
+          </select>
+        </div>
+        <div style="margin-top:14px;display:flex;gap:10px;">
+          <button id="startBtn" class="playbtn">▶️ Empezar juego</button>
+          <button id="howBtn" class="btn ghost">¿Cómo jugar?</button>
+        </div>
+      </div>
+
+      <div class="panel" id="gamePanel" aria-live="polite" style="display:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div class="progress" id="progress">Pregunta <span id="current">0</span> / <span id="total">0</span></div>
+          <div class="small" id="hint">Selecciona una respuesta por pregunta. Puedes cambiarla antes de finalizar.</div>
+        </div>
+
+        <div id="questionsWrap" style="margin-top:12px;"></div>
+
+        <div class="controls">
+          <button id="finishBtn" class="btn primary">Ver resultado</button>
+          
+        </div>
+        <div class="footer">Ingenieria en Sistemas Computacionales - IC-0101.</div>
+        <div id="resultArea" style="margin-top:12px;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Banco de frases con explicaciones y pequeños SVGs (ilustraciones vectoriales simples)
+const BANK = [
+  {text:"Las niñas no son buenas para las matemáticas.", correct:"estereotipo", explain:"No hay evidencia que el género determine la habilidad matemática; influyen la educación y las expectativas.",
+   svg:`<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect rx="12" width="120" height="120" fill="#fff"/><g transform="translate(12,12)"><circle cx="36" cy="36" r="22" fill="#fce7f3"/><circle cx="36" cy="36" r="10" fill="#fb7185"/><rect x="68" y="20" width="30" height="60" rx="8" fill="#e9d5ff"/></g></svg>`},
+  {text:"Los hombres no deben llorar.", correct:"estereotipo", explain:"Expresar emociones es parte de la salud mental; limitarlo aumenta el riesgo emocional.",
+   svg:`<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect rx="12" width="120" height="120" fill="#fff"/><g transform="translate(12,12)"><rect x="10" y="20" width="40" height="60" rx="10" fill="#e0f2fe"/><circle cx="80" cy="36" r="18" fill="#fde68a"/></g></svg>`},
+  {text:"Las mujeres manejan mal.", correct:"estereotipo", explain:"La habilidad al conducir depende de experiencia y práctica, no del género.",
+   svg:`<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect rx="12" width="120" height="120" fill="#fff"/><g transform="translate(12,12)"><rect x="12" y="46" width="86" height="26" rx="8" fill="#d1fae5"/><circle cx="30" cy="82" r="6" fill="#60a5fa"/><circle cx="90" cy="82" r="6" fill="#60a5fa"/></g></svg>`},
+  {text:"Los hombres siempre deben pagar la cuenta.", correct:"estereotipo", explain:"Asumir roles económicos por género refuerza estereotipos; cada pareja decide en conjunto.",
+   svg:`<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect rx="12" width="120" height="120" fill="#fff"/><g transform="translate(12,12)"><rect x="14" y="20" width="92" height="16" rx="6" fill="#fff1f2"/><circle cx="28" cy="72" r="18" fill="#fdf2f8"/></g></svg>`},
+  {text:"El rosa es para niñas y el azul para niños.", correct:"estereotipo", explain:"Los colores son construcciones culturales que cambian con el tiempo y la cultura.",
+   svg:`<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect rx="12" width="120" height="120" fill="#fff"/><rect x="10" y="16" width="44" height="88" rx="8" fill="#ffe4f0"/><rect x="66" y="16" width="44" height="88" rx="8" fill="#dbeafe"/></svg>`},
+  {text:"Una mujer no puede ser presidenta.", correct:"estereotipo", explain:"La capacidad para liderar no depende del género; existen muchas mujeres líderes con éxito.",
+   svg:`<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect rx="12" width="120" height="120" fill="#fff"/><g transform="translate(12,12)"><circle cx="36" cy="36" r="22" fill="#ede9fe"/><rect x="60" y="24" width="36" height="36" rx="6" fill="#c7f9ff"/></g></svg>`},
+  {text:"Los hombres son más fuertes que las mujeres.", correct:"realidad", explain:"En promedio hay diferencias fisiológicas en masa muscular, pero no justifican desigualdades en oportunidades.",
+   svg:`<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect rx="12" width="120" height="120" fill="#fff"/><g transform="translate(12,12)"><rect x="10" y="36" width="28" height="28" rx="6" fill="#dbeafe"/><rect x="60" y="28" width="36" height="44" rx="8" fill="#d1fae5"/></g></svg>`},
+  {text:"Cuidar niños es cosa de mujeres.", correct:"estereotipo", explain:"El cuidado infantil es una responsabilidad compartida; limitar roles dificulta las opciones de todos.",
+   svg:`<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect rx="12" width="120" height="120" fill="#fff"/><g transform="translate(12,12)"><circle cx="30" cy="34" r="22" fill="#fff1f2"/><rect x="62" y="36" width="36" height="32" rx="6" fill="#ede9fe"/></g></svg>`},
+  {text:"Las mujeres son chismosas.", correct:"estereotipo", explain:"Etiquetar a un grupo con un rasgo negativo es injusto; el comportamiento no depende del género.",
+   svg:`<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect rx="12" width="120" height="120" fill="#fff"/><g transform="translate(12,12)"><ellipse cx="36" cy="44" rx="26" ry="18" fill="#fff7ed"/><ellipse cx="84" cy="36" rx="20" ry="14" fill="#eef2ff"/></g></svg>`},
+  {text:"Los hombres no pueden cuidar del hogar.", correct:"estereotipo", explain:"Las tareas del hogar se aprenden y se comparten; muchas personas de cualquier género las realizan bien.",
+   svg:`<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect rx="12" width="120" height="120" fill="#fff"/><g transform="translate(12,12)"><rect x="12" y="20" width="88" height="64" rx="8" fill="#f0f9ff"/></g></svg>`},
+  {text:"Las mujeres y hombres deben tener las mismas oportunidades en el trabajo.", correct:"justa", explain:"La igualdad de oportunidades beneficia a la sociedad y permite que el talento se desarrolle sin barreras.",
+   svg:`<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect rx="12" width="120" height="120" fill="#fff"/><g transform="translate(12,12)"><rect x="10" y="18" width="40" height="84" rx="8" fill="#d1fae5"/><rect x="66" y="18" width="34" height="84" rx="8" fill="#dbeafe"/></g></svg>`},
+  {text:"Es importante enseñar a los niños a expresar emociones.", correct:"justa", explain:"La inteligencia emocional ayuda a prevenir conflictos y mejora la salud mental y las relaciones.",
+   svg:`<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect rx="12" width="120" height="120" fill="#fff"/><g transform="translate(12,12)"><circle cx="30" cy="36" r="22" fill="#fff1f2"/><rect x="64" y="34" width="36" height="28" rx="6" fill="#d1fae5"/></g></svg>`}
+];
+
+// Estado
+let questions = [];
+let answers = {}; // index -> selected
+let totalToShow = 8;
+
+// util shuffle
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; }
+
+// audio simple (select)
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function clickTone(){ const o=audioCtx.createOscillator(); const g=audioCtx.createGain(); o.type='sine'; o.frequency.value=880; g.gain.value=0.06; o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime+0.08); }
+
+// construir preguntas visibles
+function buildQuestions(){
+  const wrap = document.getElementById('questionsWrap');
+  wrap.innerHTML='';
+  questions.forEach((q, i)=>{
+    const div = document.createElement('div');
+    div.className='question';
+    div.setAttribute('data-index', i);
+    div.innerHTML = `
+      <div class="svgwrap" aria-hidden="true">${q.svg}</div>
+      <div class="qtext">
+        <div class="qtitle">${i+1}. ${q.text}</div>
+        <div class="options" role="list">
+          <button class="opt" data-val="estereotipo" role="listitem">🟣 Estereotipo</button>
+          <button class="opt" data-val="realidad" role="listitem">🔵 Realidad</button>
+          <button class="opt" data-val="justa" role="listitem">🟢 Idea justa</button>
+        </div>
+      </div>`;
+    wrap.appendChild(div);
+  });
+  document.getElementById('total').textContent = questions.length;
+  document.getElementById('current').textContent = questions.length;
+  // attach listeners
+  Array.from(document.querySelectorAll('.options')).forEach(optGroup=>{
+    optGroup.addEventListener('click', e=>{
+      if(e.target.matches('button.opt')){
+        const parent = e.target.closest('.question');
+        const idx = parseInt(parent.getAttribute('data-index'),10);
+        // marcar selección visualmente
+        Array.from(parent.querySelectorAll('button.opt')).forEach(b=>b.classList.remove('selected'));
+        e.target.classList.add('selected');
+        answers[idx] = e.target.getAttribute('data-val');
+        // sonido (necesita gesto previo para activar ctx)
+        if(audioCtx.state === 'suspended') audioCtx.resume();
+        clickTone();
+      }
+    });
+  });
+}
+
+// iniciar juego
+function startGame(){
+  const countSel = document.getElementById('numQ').value;
+  const count = countSel === 'all' ? BANK.length : parseInt(countSel,10);
+  questions = BANK.slice();
+  shuffle(questions);
+  if(count !== BANK.length) questions = questions.slice(0,count);
+  // reasignar
+  answers = {};
+  totalToShow = questions.length;
+  buildQuestions();
+  document.getElementById('coverPanel').style.display='none';
+  document.getElementById('gamePanel').style.display='block';
+  document.getElementById('resultArea').innerHTML='';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// calcular resultado (mostrar general)
+function finishGame(){
+  // requiere que al menos una respuesta esté dada; permite terminar aunque falten (se cuentan como incorrectas)
+  let score = 0;
+  for(let i=0;i<questions.length;i++){
+    const q = questions[i];
+    const sel = answers[i] || null;
+    if(sel === q.correct) score++;
+  }
+  // mostrar resultado general solamente
+  const area = document.getElementById('resultArea');
+  area.innerHTML = `<div class="resultCard"><h3>Resultado general</h3><p style="font-size:18px;font-weight:800">${score} / ${questions.length} puntos</p><p class="small">Se contabilizaron las respuestas seleccionadas. Puedes pulsar "Mostrar explicaciones" si deseas verlas.</p><div style="margin-top:8px"><button id="showExp" class="btn ghost">Mostrar explicaciones</button> <button id="again" class="btn primary">Jugar otra vez</button></div></div>`;
+  // evento para mostrar explicaciones adicionales (opcional)
+  document.getElementById('again').addEventListener('click', ()=>{ location.reload(); });
+  document.getElementById('showExp').addEventListener('click', ()=>{
+    showExplanations();
+  });
+  // efecto sonoro y scroll
+  if(audioCtx.state === 'suspended') audioCtx.resume();
+  // tono diferente según rendimiento
+  const perc = score / questions.length;
+  if(perc >= 0.7){ toneWin(); } else { toneLose(); }
+  window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'});
+}
+
+// mostrar explicaciones por pregunta (opcional)
+function showExplanations(){
+  const wrap = document.createElement('div');
+  wrap.style.marginTop='12px';
+  questions.forEach((q,i)=>{
+    const sel = answers[i] || 'Sin responder';
+    const ok = sel === q.correct;
+    const div = document.createElement('div');
+    div.style.marginBottom = '8px';
+    div.innerHTML = `<strong>Pregunta ${i+1}:</strong> ${q.text}<br>
+      <em>Tu respuesta:</em> ${sel==='Sin responder'?sel:label(sel)} — <strong>${ok?'<span style="color:var(--good)">Correcto</span>':'<span style="color:var(--bad)">Incorrecto</span>'}</strong><br>
+      <small>${q.explain}</small>`;
+    wrap.appendChild(div);
+  });
+  const area = document.getElementById('resultArea');
+  area.appendChild(wrap);
+  // deshabilitar botón si aparece de nuevo
+  const btn = document.getElementById('showExp');
+  if(btn) btn.disabled = true;
+}
+
+// pequeños tonos
+function toneWin(){ const o=audioCtx.createOscillator(); const g=audioCtx.createGain(); o.type='triangle'; o.frequency.value=880; g.gain.value=0.06; o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime+0.12); }
+function toneLose(){ const o=audioCtx.createOscillator(); const g=audioCtx.createGain(); o.type='sawtooth'; o.frequency.value=220; g.gain.value=0.08; o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime+0.18); }
+
+function label(v){ if(v==='estereotipo') return 'Estereotipo'; if(v==='realidad') return 'Realidad'; if(v==='justa') return 'Idea justa'; return v; }
+
+// botones
+document.getElementById('startBtn').addEventListener('click', ()=>{ if(audioCtx.state === 'suspended') audioCtx.resume(); startGame(); });
+document.getElementById('howBtn').addEventListener('click', ()=>{ alert('Lee la frase y selecciona Estereotipo / Realidad / Idea justa. No hay comprobación por pregunta; cuando termines pulsa "Ver resultado" para calcular la puntuación.'); });
+document.getElementById('finishBtn').addEventListener('click', ()=>{ finishGame(); });
+document.getElementById('resetBtn').addEventListener('click', ()=>{ location.reload(); });
+
+// iniciar (sin mostrar preguntas)
+document.addEventListener('DOMContentLoaded', ()=>{
+  // no hace nada hasta empezar
+});
+</script>
+</body>
+</html>
